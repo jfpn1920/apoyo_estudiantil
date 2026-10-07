@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>apoyo estudiantil</title>
+    <link rel="stylesheet" href="apoyo_estudiantil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="apoyo_estudiantil.js" defer></script>
+</head>
+<body>
+    <!-------------------------------------->
+    <!--|estructuracion_apoyo_estudiantil|-->
+    <!-------------------------------------->
+    <main class="app">
+        <!-- ENCABEZADO: título y descripción -->
+        <header class="encabezado">
+            <h1>Apoyo Estudiantil</h1>
+            <p>Tres recursos sencillos para organizar tu estudio.</p>
+        </header>
+        <!-- PESTAÑAS: una por cada recurso (data-tab indica a cuál sección pertenece) -->
+        <nav class="pestanas">
+            <button class="pestana" data-tab="habitos" type="button">Hábitos</button>
+            <button class="pestana" data-tab="promedio" type="button">Promedio</button>
+            <button class="pestana" data-tab="bloc" type="button">Notas</button>
+        </nav>
+        <!-- RECURSO 1: lista de hábitos de estudio -->
+        <section id="habitos" class="recurso">
+            <h2>Hábitos para estudiar mejor</h2>
+            <p class="texto">Marca los hábitos que ya practicas.</p>
+            <!-- Cada casilla tiene un data-habito para identificarla al guardar -->
+            <label class="habito"><input type="checkbox" data-habito="h1"> Organizar un horario de estudio semanal</label>
+            <label class="habito"><input type="checkbox" data-habito="h2"> Estudiar en un lugar sin distracciones</label>
+            <label class="habito"><input type="checkbox" data-habito="h3"> Hacer una pausa corta cada 45 minutos</label>
+            <label class="habito"><input type="checkbox" data-habito="h4"> Repasar los apuntes el mismo día de clase</label>
+            <label class="habito"><input type="checkbox" data-habito="h5"> Dormir bien antes de un examen</label>
+            <!-- JavaScript escribe cuántos hábitos llevas -->
+            <p id="progresoHabitos" class="progreso"></p>
+        </section>
+        <!-- RECURSO 2: calculadora de promedio de notas -->
+        <section id="promedio" class="recurso" hidden>
+            <h2>Calculadora de promedio</h2>
+            <p class="texto">Escala de 0.0 a 5.0. Se aprueba con 3.0 o más.</p>
+            <!-- Formulario para agregar una nota -->
+            <form id="formNota" class="form-nota" novalidate>
+                <input type="number" id="inputNota" placeholder="Ej: 4.2" min="0" max="5" step="0.1">
+                <button type="submit" class="boton">Agregar nota</button>
+            </form>
+            <!-- Aquí JavaScript escribe los mensajes de error -->
+            <p id="mensaje" class="mensaje" role="alert"></p>
+            <!-- Lista de notas (JavaScript la llena) -->
+            <ul id="listaNotas" class="lista"></ul>
+            <!-- Promedio y estado -->
+            <div class="resultado">
+                <span>Promedio: <strong id="promedioValor">—</strong></span>
+                <span id="estado" class="estado"></span>
+            </div>
+            <button id="btnBorrar" class="btn-texto" type="button">Borrar todas las notas</button>
+        </section>
+        <!-- RECURSO 3: bloc de notas -->
+        <section id="bloc" class="recurso" hidden>
+            <h2>Bloc de notas</h2>
+            <p class="texto">Escribe lo que no quieres olvidar. Se guarda solo.</p>
+            <textarea id="textoBloc" rows="8" placeholder="Ej: Entregar el taller de matemáticas el viernes..."></textarea>
+        </section>
+    </main>
+</body>
+</html>
