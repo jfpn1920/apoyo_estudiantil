@@ -1,7 +1,9 @@
-// ===== REFERENCIAS A LOS ELEMENTOS DEL HTML =====
-const pestanas = document.querySelectorAll('.pestana');         // botones de las pestañas
-const recursos = document.querySelectorAll('.recurso');         // las tres secciones
-const casillas = document.querySelectorAll('[data-habito]');    // casillas de hábitos
+//-------------------------------------//
+//--|funcionalidad_apoyo_estudiantil|--//
+//-------------------------------------//
+const pestanas = document.querySelectorAll('.pestana');
+const recursos = document.querySelectorAll('.recurso');
+const casillas = document.querySelectorAll('[data-habito]');
 const progresoHabitos = document.getElementById('progresoHabitos');
 const formNota = document.getElementById('formNota');
 const inputNota = document.getElementById('inputNota');
@@ -11,69 +13,98 @@ const promedioValor = document.getElementById('promedioValor');
 const estadoTexto = document.getElementById('estado');
 const btnBorrar = document.getElementById('btnBorrar');
 const textoBloc = document.getElementById('textoBloc');
-// ===== CLAVE DE LOCALSTORAGE =====
 const CLAVE = 'apoyo_estado';
-// ===== ESTADO POR DEFECTO =====
-// tab: pestaña abierta | habitos: ids marcados | notas: lista de notas | bloc: texto libre
-const estadoInicial = { tab: 'habitos', habitos: [], notas: [], bloc: '' };
-// ===== LEER EL ESTADO GUARDADO =====
+const estadoInicial = {
+    tab: 'habitos',
+    habitos: [],
+    notas: [],
+    bloc: ''
+};
+//--------------------------//
+//--|leer_estado_guardado|--//
+//--------------------------//
 function leerEstado() {
     try {
         const guardado = localStorage.getItem(CLAVE);
-        // Si hay datos guardados los usamos; si no, partimos del estado inicial
-        return guardado ? { ...estadoInicial, ...JSON.parse(guardado) } : { ...estadoInicial };
+        if (guardado) {
+            return {
+                ...estadoInicial,
+                ...JSON.parse(guardado)
+            };
+        }
+        return { ...estadoInicial };
     } catch (error) {
-      return { ...estadoInicial }; // si algo falla, empezamos desde cero
+        return { ...estadoInicial };
     }
 }
-// Al cargar la página recuperamos todo lo guardado
 let estado = leerEstado();
-// ===== GUARDAR EL ESTADO =====
 function guardarEstado() {
     localStorage.setItem(CLAVE, JSON.stringify(estado));
 }
-// ===== CAMBIAR DE PESTAÑA =====
+//---------------------//
+//--|cambiar_pestana|--//
+//---------------------//
 function cambiarTab(tab) {
     estado.tab = tab;
     guardarEstado();
     dibujarPantalla();
 }
-// ===== MARCAR O DESMARCAR UN HÁBITO =====
+//-------------------------------//
+//--|marcar_o_desmarcar_habito|--//
+//-------------------------------//
 function alternarHabito(id, marcado) {
-    if (marcado) estado.habitos.push(id);                          // lo agregamos a la lista
-    else estado.habitos = estado.habitos.filter(h => h !== id);    // lo quitamos de la lista
+    if (marcado) {
+        estado.habitos.push(id);
+    } else {
+        estado.habitos = estado.habitos.filter(h => h !== id);
+    }
     guardarEstado();
     dibujarPantalla();
 }
-// ===== AGREGAR UNA NOTA =====
+//----------------------//
+//--|agregar_una_nota|--//
+//----------------------// 
 function agregarNota(evento) {
-    evento.preventDefault();  // evita que la página se recargue
+    evento.preventDefault();
     const valor = parseFloat(inputNota.value);
-    // Validación: la nota debe estar entre 0 y 5
     if (isNaN(valor) || valor < 0 || valor > 5) {
         mensaje.textContent = 'Escribe una nota entre 0.0 y 5.0.';
         return;
     }
-    estado.notas.push({ id: Date.now(), valor });  // id único con la fecha
+    estado.notas.push({
+        id: Date.now(),
+        valor
+    });
     guardarEstado();
     formNota.reset();
     mensaje.textContent = '';
     dibujarPantalla();
 }
-// ===== ELIMINAR UNA NOTA O TODAS =====
+//-----------------------//
+//--|eliminar_una_nota|--//
+//-----------------------//
 function eliminarNota(id) {
-    estado.notas = estado.notas.filter(n => n.id !== id);  // conserva todas menos esa
+    estado.notas = estado.notas.filter(n => n.id !== id);
     guardarEstado();
     dibujarPantalla();
 }
+//----------------------------//
+//--|borrar_todas_las_notas|--//
+//----------------------------//
 function borrarNotas() {
-    if (estado.notas.length === 0) return;
-    if (!confirm('¿Seguro que quieres borrar todas las notas?')) return;
+    if (estado.notas.length === 0) {
+        return;
+    }
+    if (!confirm('¿Seguro que quieres borrar todas las notas?')) {
+        return;
+    }
     estado.notas = [];
     guardarEstado();
     dibujarPantalla();
 }
-// ===== DIBUJAR EL RECURSO DE PROMEDIO =====
+//---------------------------------------//
+//--|mostrar_lista_y_promedio_de_notas|--//
+//---------------------------------------//
 function dibujarNotas() {
     listaNotas.innerHTML = '';
     let suma = 0;
@@ -89,33 +120,48 @@ function dibujarNotas() {
         item.append(texto, boton);
         listaNotas.appendChild(item);
     });
-    // Promedio = suma de notas dividida entre la cantidad de notas
     const hayNotas = estado.notas.length > 0;
     const promedio = hayNotas ? suma / estado.notas.length : 0;
     promedioValor.textContent = hayNotas ? promedio.toFixed(2) : '—';
     estadoTexto.textContent = hayNotas ? (promedio >= 3 ? 'Aprobado' : 'Por mejorar') : '';
     estadoTexto.className = hayNotas ? (promedio >= 3 ? 'estado aprobado' : 'estado reprobado') : 'estado';
 }
-// ===== ACTUALIZAR TODO LO QUE SE VE EN PANTALLA =====
+//-----------------------------------------//
+//--|actualizar_elementos_de_la_pantalla|--//
+//-----------------------------------------//
 function dibujarPantalla() {
-    // Pestañas: marcamos la activa y mostramos solo su sección
-    pestanas.forEach(p => p.classList.toggle('activa', p.dataset.tab === estado.tab));
-    recursos.forEach(r => { r.hidden = r.id !== estado.tab; });
-    // Hábitos: marcamos las casillas guardadas y mostramos el progreso
-    casillas.forEach(c => { c.checked = estado.habitos.includes(c.dataset.habito); });
+    pestanas.forEach(p => {
+        p.classList.toggle('activa', p.dataset.tab === estado.tab);
+    });
+    recursos.forEach(r => {
+        r.hidden = r.id !== estado.tab;
+    });
+    casillas.forEach(c => {
+        c.checked = estado.habitos.includes(c.dataset.habito);
+    });
     progresoHabitos.textContent = `${estado.habitos.length} de ${casillas.length} hábitos completados`;
     dibujarNotas();
 }
-// ===== EVENTOS =====
-pestanas.forEach(p => p.addEventListener('click', () => cambiarTab(p.dataset.tab)));
-casillas.forEach(c => c.addEventListener('change', () => alternarHabito(c.dataset.habito, c.checked)));
+//-------------------------------------// 
+//--|eventos_de_navegacion_y_habitos|--//
+//-------------------------------------//
+pestanas.forEach(p => {
+    p.addEventListener('click', () => cambiarTab(p.dataset.tab));
+});
+casillas.forEach(c => {
+    c.addEventListener('change', () => alternarHabito(c.dataset.habito, c.checked));
+});
 formNota.addEventListener('submit', agregarNota);
 btnBorrar.addEventListener('click', borrarNotas);
-// El bloc de notas se guarda mientras se escribe
+//----------------------------//
+//--|guardar_texto_del_bloc|--//
+//----------------------------//
 textoBloc.addEventListener('input', () => {
     estado.bloc = textoBloc.value;
     guardarEstado();
 });
-// ===== INICIO: se ejecuta al cargar o refrescar la página =====
-textoBloc.value = estado.bloc;  // recupera el texto del bloc de notas
-dibujarPantalla();              // dibuja pestañas, hábitos y notas guardados
+//-------------------------------//
+//--|iniciar_apoyo_estudiantil|--//
+//-------------------------------//
+textoBloc.value = estado.bloc;
+dibujarPantalla();

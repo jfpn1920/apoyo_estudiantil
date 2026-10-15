@@ -1,25 +1,21 @@
-/* ===== VARIABLES DE COLOR (se usan en todo el archivo) ===== */
-:root {
-  --fondo: #f4f0ee;          /* fondo de la página */
-  --panel: #ffffff;          /* fondo de las tarjetas */
-  --texto: #2a2325;          /* color principal del texto */
-  --texto-suave: #70666a;    /* textos secundarios */
-  --borde: #ded6d8;          /* color de los bordes */
-  --acento: #7b2d3b;         /* vino tinto: botones y títulos */
-  --ok: #2e7d4f;             /* verde: aprobado */
-  --error: #b3261e;          /* rojo: errores y reprobado */
-}
-/* ===== REINICIO BÁSICO ===== */
 * {
-    box-sizing: border-box;    /* el padding no agranda los elementos */
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-/* Hace que el atributo "hidden" siempre oculte el elemento */
+:root {
+    --fondo: #f4f0ee;
+    --panel: #ffffff;
+    --texto: #2a2325;
+    --texto-suave: #70666a;
+    --borde: #ded6d8;
+    --acento: #7b2d3b;
+    --ok: #2e7d4f;
+    --error: #b3261e;
+}
 [hidden] {
     display: none !important;
 }
-/* ===== ESTILO GENERAL DE LA PÁGINA ===== */
 body {
     font-family: "Trebuchet MS", "Segoe UI", sans-serif;
     background: var(--fondo);
@@ -27,12 +23,13 @@ body {
     line-height: 1.5;
     padding: 24px 16px;
 }
-/* Contenedor central con ancho máximo */
+/*------------------------------*/
+/*--|estilo_apoyo_estudiantil|--*/   
+/*------------------------------*/
 .app {
     max-width: 560px;
     margin: 0 auto;
 }
-/* ===== ENCABEZADO ===== */
 .encabezado {
     margin-bottom: 20px;
 }
@@ -43,14 +40,16 @@ body {
 .encabezado p {
     color: var(--texto-suave);
 }
-/* ===== PESTAÑAS ===== */
+/*----------------------------*/
+/*--|pestanas_de_navegacion|--*/
+/*----------------------------*/
 .pestanas {
     display: flex;
     gap: 6px;
     margin-bottom: 14px;
 }
 .pestana {
-    flex: 1;                   /* las tres pestañas ocupan el mismo ancho */
+    flex: 1;
     padding: 10px;
     background: var(--panel);
     color: var(--texto);
@@ -59,13 +58,17 @@ body {
     font-size: 1rem;
     cursor: pointer;
 }
-/* Pestaña seleccionada (JavaScript le agrega la clase "activa") */
+/*--------------------------*/
+/*--|pestana_seleccionada|--*/
+/*--------------------------*/
 .pestana.activa {
     background: var(--acento);
     border-color: var(--acento);
     color: #fff;
 }
-/* ===== TARJETA DE CADA RECURSO ===== */
+/*--------------------------*/
+/*--|tarjetas_de_recursos|--*/
+/*--------------------------*/
 .recurso {
     background: var(--panel);
     border: 1px solid var(--borde);
@@ -81,7 +84,9 @@ body {
     font-size: 0.9rem;
     margin-bottom: 14px;
 }
-/* ===== RECURSO 1: HÁBITOS ===== */
+/*--------------------------------*/
+/*--|recurso_habitos_de_estudio|--*/
+/*--------------------------------*/
 .habito {
     display: flex;
     align-items: center;
@@ -95,7 +100,9 @@ body {
     font-weight: bold;
     color: var(--acento);
 }
-/* ===== RECURSO 2: PROMEDIO ===== */
+/*-------------------------------------*/
+/*--|recurso_calculadora_de_promedio|--*/
+/*-------------------------------------*/
 .form-nota {
     display: flex;
     gap: 10px;
@@ -121,15 +128,20 @@ textarea:focus {
     border-radius: 6px;
     font-size: 1rem;
     cursor: pointer;
-    white-space: nowrap;       /* el texto del botón no se parte */
+    white-space: nowrap;
 }
-/* Mensaje de error del formulario */
+/*----------------------------*/
+/*--|mensajes_de_validacion|--*/
+/*----------------------------*/
 .mensaje {
     color: var(--error);
     font-size: 0.9rem;
-    min-height: 1.3em;         /* evita que el diseño salte al aparecer */
+    min-height: 1.3em;
     margin: 8px 0;
 }
+/*--------------------*/
+/*--|lista_de_notas|--*/
+/*--------------------*/
 .lista {
     list-style: none;
 }
@@ -140,7 +152,9 @@ textarea:focus {
     padding: 8px 0;
     border-bottom: 1px solid var(--borde);
 }
-/* Botones de texto (eliminar y borrar todo) */
+/*----------------------*/
+/*--|botones_de_texto|--*/
+/*----------------------*/
 .btn-texto {
     background: none;
     border: none;
@@ -148,6 +162,9 @@ textarea:focus {
     cursor: pointer;
     font-size: 0.9rem;
 }
+/*----------------------------*/
+/*--|resultado_del_promedio|--*/
+/*----------------------------*/
 .resultado {
     display: flex;
     justify-content: space-between;
@@ -155,14 +172,22 @@ textarea:focus {
     margin: 14px 0 8px;
     font-size: 1.2rem;
 }
-/* Estado: aprobado (verde) o reprobado (rojo), según la clase */
+/*--------------------------*/
+/*--|estado_de_aprobacion|--*/
+/*--------------------------*/
 .estado {
     font-size: 0.95rem;
     font-weight: bold;
 }
-.estado.aprobado { color: var(--ok); }
-.estado.reprobado { color: var(--error); }
-/* ===== RECURSO 3: BLOC DE NOTAS ===== */
+.estado.aprobado {
+    color: var(--ok);
+}
+.estado.reprobado {
+    color: var(--error);
+}
+/*---------------------------*/
+/*--|recurso_bloc_de_notas|--*/
+/*---------------------------*/
 textarea {
     resize: vertical;
 }
